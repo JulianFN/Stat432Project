@@ -1,0 +1,174 @@
+---
+title: "Project Data"
+author: "Will Jeziorski - wsj2"
+date: "March 24, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(rjson)
+library(utils)
+```
+
+```{r data_initialization_step_i}
+#READ IN YOUR DATA FILE USING THIS CODE EACH TIME. THIS WAY, THE CODE WILL RUN CORRECTLY. MAKE SURE YOU CHANGE THE NAME OF THE END DATA SET IN THE BOTTOM OF THE CLEANING CODE CHUNK.
+proj_data = fromJSON(file = "Test Data.json")
+```
+
+```{r data_cleaning_step_i}
+
+# RUN THIS CODE ON EVERY SINGLE JSON DATA FILE. YOU CAN RENAME EACH FILE AT THE VERY END 
+
+nobs = length(proj_data)
+
+win = rep(0,nobs)
+
+timeschat = rep(0,nobs)
+
+radtower = rep(0,nobs)
+
+diretower = rep(0,nobs)
+
+radracks = rep(0,nobs)
+
+direracks = rep(0,nobs)
+
+for(i in 1:nobs){
+  win[i] = proj_data[[i]]$radiant_win
+  timeschat[i] = length(proj_data[[i]]$chat)
+  radtower[i] = proj_data[[i]]$tower_status_radiant
+  diretower[i] = proj_data[[i]]$tower_status_dire
+  radracks[i] = proj_data[[i]]$barracks_status_radiant
+  direracks[i] = proj_data[[i]]$barracks_status_dire
+}
+
+which_FB = rep(0,nobs)
+
+for(i in 1:nobs){
+  killtime = rep(0,10)
+  for(j in 1:10){
+    if(length(proj_data[[i]]$players[[j]]$kills_log) == 0){
+      killtime[j] = 1E10
+      next
+    } else {
+    killtime[j] = proj_data[[i]]$players[[j]]$kills_log[[1]]$time
+    }
+  }
+  which_FB[i] = which(killtime == min(killtime))[1]
+}
+
+Radiant_FB = as.numeric(which_FB <= 5)
+
+unidata = cbind(win, timeschat, radtower, diretower, radracks, direracks, Radiant_FB)
+
+colnames(unidata) = c("Radiant Win", "Times Chatted", "Radiant Tower Status", "Dire Tower Status", "Radiant Barracks Status", "Dire Barracks Status", "Radiant FB")
+
+players = matrix(0,nobs,10)
+
+last_hits = matrix(0,nobs,10)
+
+kills = matrix(0,nobs,10)
+
+deaths = matrix(0,nobs,10)
+
+denies = matrix(0,nobs,10)
+
+damage_taken = matrix(0,nobs,10)
+
+damage_inflicted = matrix(0,nobs,10)
+
+for(i in 1:nobs){
+  for (j in 1:10){
+    players[i,j] = proj_data[[i]]$players[[j]]$hero_id
+    last_hits[i,j] = proj_data[[i]]$players[[j]]$last_hits
+    kills[i,j] = proj_data[[i]]$players[[j]]$kills
+    deaths[i,j] = proj_data[[i]]$players[[j]]$deaths
+    denies[i,j] = proj_data[[i]]$players[[j]]$denies
+    if(length(proj_data[[i]]$players[[j]]$damage_taken)== 0){
+      damage_taken[i,j] = 0
+    } else{
+      damage_taken[i,j] = Reduce("+",proj_data[[i]]$players[[j]]$damage_taken)
+    }
+    if(length(proj_data[[i]]$players[[j]]$damage) == 0){
+      damage_inflicted[i,j] = 0
+    } else {
+      damage_inflicted[i,j] = Reduce("+",proj_data[[i]]$players[[j]]$damage)
+    }
+  }
+}
+
+colnames(players) = c("Player 1 ID", "Player 2 ID", "Player 3 ID", "Player 4 ID", "Player 5 ID", "Player 6 ID", "Player 7 ID", "Player 8 ID", "Player 9 ID", "Player 10 ID")
+
+colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
+
+colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Player 4 Kills", "Player 5 Kills", "Player 6 Kills", "Player 7 Kills", "Player 8 Kills", "Player 9 Kills", "Player 10 Kills")
+
+colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
+
+colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 1 Denies")
+
+colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
+
+colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inflicted", "Player 3 Damage Inflicted", "Player 4 Damage Inflicted", "Player 5 Damage Inflicted", "Player 6 Damage Inflicted", "Player 7 Damage Inflicted", "Player 8 Damage Inflicted", "Player 9 Damage Inflicted", "Player 10 Damage Inflicted")
+
+# After finishing up the data initialization, we put all of the data into a data frame.
+
+proj_data_cleaned = as.data.frame(cbind(unidata, players, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
+
+# Reclassification from Numerics to Factors 
+
+proj_data_cleaned$`Player 1 ID` = as.factor(proj_data_cleaned$`Player 1 ID`)
+
+proj_data_cleaned$`Player 2 ID` = as.factor(proj_data_cleaned$`Player 2 ID`)
+
+proj_data_cleaned$`Player 3 ID` = as.factor(proj_data_cleaned$`Player 3 ID`)
+
+proj_data_cleaned$`Player 4 ID` = as.factor(proj_data_cleaned$`Player 4 ID`)
+
+proj_data_cleaned$`Player 5 ID` = as.factor(proj_data_cleaned$`Player 5 ID`)
+
+proj_data_cleaned$`Player 6 ID` = as.factor(proj_data_cleaned$`Player 6 ID`)
+
+proj_data_cleaned$`Player 7 ID` = as.factor(proj_data_cleaned$`Player 7 ID`)
+
+proj_data_cleaned$`Player 8 ID` = as.factor(proj_data_cleaned$`Player 8 ID`)
+
+proj_data_cleaned$`Player 9 ID` = as.factor(proj_data_cleaned$`Player 9 ID`)
+
+proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
+
+proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
+
+proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
+
+proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
+
+proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
+
+
+```
+
+```{r combining_data_sets, eval - FALSE}
+rbind("PUT ALL DATA SETS HERE")
+```
+
+```{r, eval = FALSE}
+# THIS IS WHERE IM DEBUGGING SHIT
+checking = matrix(0,1000,10)
+for (i in 1:1000){
+  for(j in 1:10){
+    if(length(Reduce("+",proj_data[[i]]$players[[j]]$damage_taken))== 1){
+      dmg = Reduce("+", proj_data[[i]]$players[[j]]$damage_taken)
+      checking[i,j] = dmg
+    } else{
+      next
+    }
+  }
+}
+
+```
