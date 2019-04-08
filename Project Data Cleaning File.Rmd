@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-THE STUFF FOR OBJECTIVES IS 0 INDEXED
+THE STUFF FOR OBJECTIVES IS 0 INDEXED for PLAYERS
 ```{r}
 library(rjson)
 library(utils)
@@ -109,7 +109,7 @@ colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Playe
 
 colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
 
-colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 1 Denies")
+colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 10 Denies")
 
 colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
 
@@ -118,8 +118,6 @@ colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inf
 # After finishing up the data initialization, we put all of the data into a data frame.
 
 proj_data_cleaned = as.data.frame(cbind(unidata, players, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
-
-#hehexd
 
 # Reclassification from Numerics to Factors 
 
@@ -163,12 +161,16 @@ rbind("PUT ALL DATA SETS HERE")
 Radiant_tower_fb = rep(0,nobs)
 
 for(i in 1:nobs){
-  for(j in 1:length(proj_data[[i]]$objectives)){
-    if(proj_data[[i]]$objectives[[j]]$subtype == 'CHAT_MESSAGE_TOWER_KILL'){
-      Radiant_tower_fb[i] = proj_data[[i]]$objectives[[j]]$team
-      break
-    } else{
-      next
+  if(length(proj_data[[i]]$objectives) == 0){
+    Radiant_tower_fb[i] = NA 
+  } else {
+    for(j in 1:length(proj_data[[i]]$objectives)){
+      if(proj_data[[i]]$objectives[[j]]$subtype == 'CHAT_MESSAGE_TOWER_KILL'){
+        Radiant_tower_fb[i] = proj_data[[i]]$objectives[[j]]$team
+        break
+      } else {
+        next
+      }
     }
   }
 }
