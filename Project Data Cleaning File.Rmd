@@ -23,11 +23,6 @@ proj_data = fromJSON(file = "Test Data.json")
 ```{r data_cleaning_step_i}
 
 # RUN THIS CODE ON EVERY SINGLE JSON DATA FILE. YOU CAN RENAME EACH FILE AT THE VERY END 
-<<<<<<< HEAD
-#afdadfsa
-#dfasdf
-=======
->>>>>>> 1682bfd9f018423a93759623a93b6e22c43f018f
 
 nobs = length(proj_data)
 
