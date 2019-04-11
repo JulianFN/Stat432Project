@@ -38,13 +38,21 @@ radracks = rep(0,nobs)
 
 direracks = rep(0,nobs)
 
+racks = 6
+tower = 11
+
+
+numberOfBuildings = function(observation) {
+  sum(as.integer(intToBits(observation)))
+}
+
 for(i in 1:nobs){
   win[i] = proj_data[[i]]$radiant_win
   timeschat[i] = length(proj_data[[i]]$chat)
-  radtower[i] = proj_data[[i]]$tower_status_radiant
-  diretower[i] = proj_data[[i]]$tower_status_dire
-  radracks[i] = proj_data[[i]]$barracks_status_radiant
-  direracks[i] = proj_data[[i]]$barracks_status_dire
+  radtower[i] = numberOfBuildings(proj_data[[i]]$tower_status_radiant)
+  diretower[i] = numberOfBuildings(proj_data[[i]]$tower_status_dire)
+  radracks[i] = numberOfBuildings(proj_data[[i]]$barracks_status_radiant)
+  direracks[i] = numberOfBuildings(proj_data[[i]]$barracks_status_dire)
 }
 
 which_FB = rep(0,nobs)
@@ -142,13 +150,13 @@ proj_data_cleaned$`Player 9 ID` = as.factor(proj_data_cleaned$`Player 9 ID`)
 
 proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
 
-proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
+#proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
 
-proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
+#proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
 
-proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
+#proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
 
-proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
+#proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
 
 
 ```

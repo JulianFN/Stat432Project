@@ -1,0 +1,13 @@
+---
+title: "LogisticRegression"
+author: "Julian Nieto"
+date: "April 8, 2019"
+output: html_document
+---
+
+```{r}
+
+mylogit <- glm(Radiant Win ~ ., data = proj_data_cleaned, family = "binomial")
+
+```
+
