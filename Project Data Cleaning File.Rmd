@@ -12,6 +12,7 @@ THE STUFF FOR OBJECTIVES IS 0 INDEXED for PLAYERS
 ```{r}
 library(rjson)
 library(utils)
+library(tidyr)
 ```
 
 ```{r data_initialization_step_i}
@@ -158,20 +159,8 @@ rbind("PUT ALL DATA SETS HERE")
 
 ```{r, eval = FALSE}
 # THIS IS WHERE IM DEBUGGING SHIT
-Radiant_tower_fb = rep(0,nobs)
+heroes = 112
 
-for(i in 1:nobs){
-  if(length(proj_data[[i]]$objectives) == 0){
-    Radiant_tower_fb[i] = NA 
-  } else {
-    for(j in 1:length(proj_data[[i]]$objectives)){
-      if(proj_data[[i]]$objectives[[j]]$subtype == 'CHAT_MESSAGE_TOWER_KILL'){
-        Radiant_tower_fb[i] = proj_data[[i]]$objectives[[j]]$team
-        break
-      } else {
-        next
-      }
-    }
-  }
-}
+for(i in 1:112)
+  
 ```
