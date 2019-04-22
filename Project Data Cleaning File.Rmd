@@ -171,6 +171,34 @@ fileToDataFrame = function(filename) {
     #proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
     return(proj_data_cleaned)
 }
+<<<<<<< HEAD
+=======
+
+Hero_ID = rep(0,heroes)
+
+for (i in 1:heroes){
+  Hero_ID[i] = paste("Hero", i)
+}
+
+colnames(player) = Hero_ID
+
+colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
+
+colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Player 4 Kills", "Player 5 Kills", "Player 6 Kills", "Player 7 Kills", "Player 8 Kills", "Player 9 Kills", "Player 10 Kills")
+
+colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
+
+colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 10 Denies")
+
+colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
+
+colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inflicted", "Player 3 Damage Inflicted", "Player 4 Damage Inflicted", "Player 5 Damage Inflicted", "Player 6 Damage Inflicted", "Player 7 Damage Inflicted", "Player 8 Damage Inflicted", "Player 9 Damage Inflicted", "Player 10 Damage Inflicted")
+
+# After finishing up the data initialization, we put all of the data into a data frame.
+
+proj_data_cleaned = as.data.frame(cbind(unidata, player, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
+
+>>>>>>> 275f28b90c203402ecdf2216659b686b773b8225
 ```
 
 ```{r combining_data_sets, eval = FALSE}
