@@ -165,10 +165,31 @@ proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
 rbind("PUT ALL DATA SETS HERE")
 ```
 
-```{r, eval = FALSE}
+```{r}
 # THIS IS WHERE IM DEBUGGING SHIT
-heroes = 112
+heroes = 120
 
-for(i in 1:112)
-  
+test_mat = matrix(0,nobs,heroes)
+
+for(i in 1:nobs){
+  for(j in 1:10){
+    for(k in 1:heroes){
+      if (players[i,j] !=k){
+        next
+      } else{
+        
+      if(j <= 5){
+        test_mat[i,k] = (players[i,j] == k)
+      } else {
+        test_mat[i,k] = -(players[i,j] == k)
+      }
+      }
+      }
+    }
+    
+}
+
+sum(test_mat == 1)
+sum(test_mat == -1)
+
 ```
