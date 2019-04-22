@@ -110,7 +110,35 @@ for(i in 1:nobs){
   }
 }
 
-colnames(players) = c("Player 1 ID", "Player 2 ID", "Player 3 ID", "Player 4 ID", "Player 5 ID", "Player 6 ID", "Player 7 ID", "Player 8 ID", "Player 9 ID", "Player 10 ID")
+heroes = 112
+
+player = matrix(0,nobs,heroes)
+
+for(i in 1:nobs){
+  for(j in 1:10){
+    for(k in 1:heroes){
+      if (players[i,j] !=k){
+        next
+      } else{
+        
+      if(j <= 5){
+        player[i,k] = (players[i,j] == k)
+      } else {
+        player[i,k] = -(players[i,j] == k)
+      }
+      }
+      }
+    }
+    
+}
+
+Hero_ID = rep(0,heroes)
+
+for (i in 1:heroes){
+  Hero_ID[i] = paste("Hero", i)
+}
+
+colnames(player) = Hero_ID
 
 colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
 
@@ -126,29 +154,10 @@ colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inf
 
 # After finishing up the data initialization, we put all of the data into a data frame.
 
-proj_data_cleaned = as.data.frame(cbind(unidata, players, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
+proj_data_cleaned = as.data.frame(cbind(unidata, player, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
 
 # Reclassification from Numerics to Factors 
 
-proj_data_cleaned$`Player 1 ID` = as.factor(proj_data_cleaned$`Player 1 ID`)
-
-proj_data_cleaned$`Player 2 ID` = as.factor(proj_data_cleaned$`Player 2 ID`)
-
-proj_data_cleaned$`Player 3 ID` = as.factor(proj_data_cleaned$`Player 3 ID`)
-
-proj_data_cleaned$`Player 4 ID` = as.factor(proj_data_cleaned$`Player 4 ID`)
-
-proj_data_cleaned$`Player 5 ID` = as.factor(proj_data_cleaned$`Player 5 ID`)
-
-proj_data_cleaned$`Player 6 ID` = as.factor(proj_data_cleaned$`Player 6 ID`)
-
-proj_data_cleaned$`Player 7 ID` = as.factor(proj_data_cleaned$`Player 7 ID`)
-
-proj_data_cleaned$`Player 8 ID` = as.factor(proj_data_cleaned$`Player 8 ID`)
-
-proj_data_cleaned$`Player 9 ID` = as.factor(proj_data_cleaned$`Player 9 ID`)
-
-proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
 
 #proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
 
@@ -165,10 +174,8 @@ proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
 rbind("PUT ALL DATA SETS HERE")
 ```
 
-```{r, eval = FALSE}
+```{r, eval = false}
 # THIS IS WHERE IM DEBUGGING SHIT
-heroes = 112
 
-for(i in 1:112)
-  
+
 ```
