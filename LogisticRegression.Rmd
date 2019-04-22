@@ -6,9 +6,17 @@ output: html_document
 ---
 
 ```{r}
+library(corrplot)
+
+corr.d <- cor( proj_data_cleaned )
+corr.d[ lower.tri( corr.d, diag = TRUE ) ] <- NA
+corrplot( corr.d, type = "upper", diag = FALSE )
 
 mylogit <- glm(`Radiant Win` ~ ., data = proj_data_cleaned, family = "binomial")
 summary(mylogit)
 
-```
 
+ols <- glm(`Radiant Win` ~ ., data = proj_data_cleaned)
+
+```
+Neural Network, logistic regresion, and random forest
