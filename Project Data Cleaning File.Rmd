@@ -110,66 +110,9 @@ for(i in 1:nobs){
   }
 }
 
-colnames(players) = c("Player 1 ID", "Player 2 ID", "Player 3 ID", "Player 4 ID", "Player 5 ID", "Player 6 ID", "Player 7 ID", "Player 8 ID", "Player 9 ID", "Player 10 ID")
+heroes = 112
 
-colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
-
-colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Player 4 Kills", "Player 5 Kills", "Player 6 Kills", "Player 7 Kills", "Player 8 Kills", "Player 9 Kills", "Player 10 Kills")
-
-colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
-
-colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 10 Denies")
-
-colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
-
-colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inflicted", "Player 3 Damage Inflicted", "Player 4 Damage Inflicted", "Player 5 Damage Inflicted", "Player 6 Damage Inflicted", "Player 7 Damage Inflicted", "Player 8 Damage Inflicted", "Player 9 Damage Inflicted", "Player 10 Damage Inflicted")
-
-# After finishing up the data initialization, we put all of the data into a data frame.
-
-proj_data_cleaned = as.data.frame(cbind(unidata, players, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
-
-# Reclassification from Numerics to Factors 
-
-proj_data_cleaned$`Player 1 ID` = as.factor(proj_data_cleaned$`Player 1 ID`)
-
-proj_data_cleaned$`Player 2 ID` = as.factor(proj_data_cleaned$`Player 2 ID`)
-
-proj_data_cleaned$`Player 3 ID` = as.factor(proj_data_cleaned$`Player 3 ID`)
-
-proj_data_cleaned$`Player 4 ID` = as.factor(proj_data_cleaned$`Player 4 ID`)
-
-proj_data_cleaned$`Player 5 ID` = as.factor(proj_data_cleaned$`Player 5 ID`)
-
-proj_data_cleaned$`Player 6 ID` = as.factor(proj_data_cleaned$`Player 6 ID`)
-
-proj_data_cleaned$`Player 7 ID` = as.factor(proj_data_cleaned$`Player 7 ID`)
-
-proj_data_cleaned$`Player 8 ID` = as.factor(proj_data_cleaned$`Player 8 ID`)
-
-proj_data_cleaned$`Player 9 ID` = as.factor(proj_data_cleaned$`Player 9 ID`)
-
-proj_data_cleaned$`Player 10 ID` = as.factor(proj_data_cleaned$`Player 10 ID`)
-
-#proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
-
-#proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
-
-#proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
-
-#proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
-
-
-```
-
-```{r combining_data_sets, eval = FALSE}
-rbind("PUT ALL DATA SETS HERE")
-```
-
-```{r}
-# THIS IS WHERE IM DEBUGGING SHIT
-heroes = 120
-
-test_mat = matrix(0,nobs,heroes)
+player = matrix(0,nobs,heroes)
 
 for(i in 1:nobs){
   for(j in 1:10){
@@ -189,7 +132,50 @@ for(i in 1:nobs){
     
 }
 
-sum(test_mat == 1)
-sum(test_mat == -1)
+Hero_ID = rep(0,heroes)
+
+for (i in 1:heroes){
+  Hero_ID[i] = paste("Hero", i)
+}
+
+colnames(player) = Hero_ID
+
+colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
+
+colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Player 4 Kills", "Player 5 Kills", "Player 6 Kills", "Player 7 Kills", "Player 8 Kills", "Player 9 Kills", "Player 10 Kills")
+
+colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
+
+colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 10 Denies")
+
+colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
+
+colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inflicted", "Player 3 Damage Inflicted", "Player 4 Damage Inflicted", "Player 5 Damage Inflicted", "Player 6 Damage Inflicted", "Player 7 Damage Inflicted", "Player 8 Damage Inflicted", "Player 9 Damage Inflicted", "Player 10 Damage Inflicted")
+
+# After finishing up the data initialization, we put all of the data into a data frame.
+
+proj_data_cleaned = as.data.frame(cbind(unidata, player, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
+
+# Reclassification from Numerics to Factors 
+
+
+#proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
+
+#proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
+
+#proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
+
+#proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
+
+
+```
+
+```{r combining_data_sets, eval = FALSE}
+rbind("PUT ALL DATA SETS HERE")
+```
+
+```{r, eval = false}
+# THIS IS WHERE IM DEBUGGING SHIT
+
 
 ```
