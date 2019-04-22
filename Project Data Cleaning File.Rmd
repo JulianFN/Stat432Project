@@ -122,9 +122,9 @@ for(i in 1:nobs){
       } else{
         
       if(j <= 5){
-        test_mat[i,k] = (players[i,j] == k)
+        player[i,k] = (players[i,j] == k)
       } else {
-        test_mat[i,k] = -(players[i,j] == k)
+        player[i,k] = -(players[i,j] == k)
       }
       }
       }
