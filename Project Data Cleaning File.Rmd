@@ -156,18 +156,6 @@ colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inf
 
 proj_data_cleaned = as.data.frame(cbind(unidata, player, kills, deaths, last_hits, denies, damage_taken, damage_inflicted))
 
-# Reclassification from Numerics to Factors 
-
-
-#proj_data_cleaned$`Radiant Tower Status` = as.factor(proj_data_cleaned$`Radiant Tower Status`)
-
-#proj_data_cleaned$`Dire Tower Status` = as.factor(proj_data_cleaned$`Dire Tower Status`)
-
-#proj_data_cleaned$`Radiant Barracks Status` = as.factor(proj_data_cleaned$`Radiant Barracks Status`)
-
-#proj_data_cleaned$`Dire Barracks Status` = as.factor(proj_data_cleaned$`Dire Barracks Status`)
-
-
 ```
 
 ```{r combining_data_sets, eval = FALSE}
