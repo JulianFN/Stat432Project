@@ -175,8 +175,8 @@ fileToDataFrame = function(filename) {
 ```
 
 ```{r combining_data_sets, eval = FALSE}
-proj_data_cleaned = fileToDataFrame("doc1.json")
-rbind("PUT ALL DATA SETS HERE")
+proj_data_cleaned = fileToDataFrame("Test Data.json")
+#rbind("PUT ALL DATA SETS HERE")
 ```
 
 ```{r, eval = false}
