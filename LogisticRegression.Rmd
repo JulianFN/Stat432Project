@@ -12,11 +12,37 @@ corr.d <- cor( proj_data_cleaned )
 corr.d[ lower.tri( corr.d, diag = TRUE ) ] <- NA
 corrplot( corr.d, type = "upper", diag = FALSE )
 
-mylogit <- glm(`Radiant Win` ~ ., data = proj_data_cleaned, family = "binomial")
+newProjData = proj_data_cleaned[, -seq(8, 117)]
+
+mylogit <- glm(`Radiant Win` ~ ., data = newProjData, family = "binomial")
 summary(mylogit)
 
 
 ols <- glm(`Radiant Win` ~ ., data = proj_data_cleaned)
 
 ```
+
+```{r}
+# load library
+require(neuralnet)
+
+# fit neural network
+nn=neuralnet(`Radiant Win` ~ `Times Chatted`, data = newProjData, hidden=ncol(proj_data_cleaned),act.fct = "logistic",
+                linear.output = FALSE)
+
+plot(nn)
+
+KS=c(20,10,30,20,80,30)
+CSS=c(90,20,40,50,50,80)
+Wierd = c(12, 21, 12,21, 12, 121)
+Placed=c(1,0,0,0,1,1)
+# Here, you will combine multiple columns or features into a single set of data
+df=data.frame(TKS,CSS,Wierd,Placed)
+
+nn=neuralnet(Placed ~ ., data = df, hidden=4,act.fct = "logistic",
+                linear.output = FALSE)
+
+plot(nn)
+```
+
 Neural Network, logistic regresion, and random forest

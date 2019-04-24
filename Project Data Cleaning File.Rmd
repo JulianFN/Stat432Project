@@ -77,7 +77,7 @@ fileToDataFrame = function(filename) {
     
     unidata = cbind(win, timeschat, radtower, diretower, radracks, direracks, Radiant_FB)
     
-    colnames(unidata) = c("Radiant Win", "Times Chatted", "Radiant Tower Status", "Dire Tower Status", "Radiant Barracks Status", "Dire Barracks Status", "Radiant FB")
+    colnames(unidata) = c("RadiantWin", "TimesChatted", "RadiantTowerStatus", "DireTowerStatus", "RadiantBarracksStatus", "DireBarracksStatus", "RadiantFB")
     
     players = matrix(0,nobs,10)
     
@@ -138,22 +138,22 @@ fileToDataFrame = function(filename) {
     Hero_ID = rep(0,heroes)
     
     for (i in 1:heroes){
-      Hero_ID[i] = paste("Hero", i)
+      Hero_ID[i] = paste0("Hero", i)
     }
     
     colnames(player) = Hero_ID
     
-    colnames(last_hits) = c("Player 1 CS", "Player 2 CS", "Player 3 CS", "Player 4 CS", "Player 5 CS", "Player 6 CS", "Player 7 CS", "Player 8 CS", "Player 9 CS", "Player 10 CS")
+    colnames(last_hits) = c("Player1CS", "Player2CS", "Player3CS", "Player4CS", "Player5CS", "Player6CS", "Player7CS", "Player8CS", "Player9CS", "Player10CS")
     
-    colnames(kills) = c("Player 1 Kills", "Player 2 Kills", "Player 3 Kills", "Player 4 Kills", "Player 5 Kills", "Player 6 Kills", "Player 7 Kills", "Player 8 Kills", "Player 9 Kills", "Player 10 Kills")
+    colnames(kills) = c("Player1Kills", "Player2Kills", "Player3Kills", "Player4Kills", "Player5Kills", "Player6Kills", "Player7Kills", "Player8Kills", "Player9Kills", "Player10Kills")
     
-    colnames(deaths) = c("Player 1 Deaths", "Player 2 Deaths", "Player 3 Deaths", "Player 4 Deaths", "Player 5 Deaths", "Player 6 Deaths", "Player 7 Deaths", "Player 8 Deaths", "Player 9 Deaths", "Player 10 Deaths")
+    colnames(deaths) = c("Player1Deaths", "Player2Deaths", "Player3Deaths", "Player4Deaths", "Player5Deaths", "Player6Deaths", "Player7Deaths", "Player8Deaths", "Player9Deaths", "Player10Deaths")
     
-    colnames(denies) = c("Player 1 Denies", "Player 2 Denies", "Player 3 Denies", "Player 4 Denies", "Player 5 Denies", "Player 6 Denies", "Player 7 Denies", "Player 8 Denies", "Player 9 Denies", "Player 10 Denies")
+    colnames(denies) = c("Player1Denies", "Player2Denies", "Player3Denies", "Player4Denies", "Player5Denies", "Player6Denies", "Player7Denies", "Player8Denies", "Player9Denies", "Player10Denies")
     
-    colnames(damage_taken) = c("Player 1 Damage Taken", "Player 2 Damage Taken", "Player 3 Damage Taken", "Player 4 Damage Taken", "Player 5 Damage Taken", "Player 6 Damage Taken", "Player 7 Damage Taken", "Player 8 Damage Taken", "Player 9 Damage Taken", "Player 10 Damage Taken")
+    colnames(damage_taken) = c("Player1DamageTaken", "Player2DamageTaken", "Player3DamageTaken", "Player4DamageTaken", "Player5DamageTaken", "Player6DamageTaken", "Player7DamageTaken", "Player8DamageTaken", "Player9DamageTaken", "Player10DamageTaken")
     
-    colnames(damage_inflicted) = c("Player 1 Damage Inflicted", "Player 2 Damage Inflicted", "Player 3 Damage Inflicted", "Player 4 Damage Inflicted", "Player 5 Damage Inflicted", "Player 6 Damage Inflicted", "Player 7 Damage Inflicted", "Player 8 Damage Inflicted", "Player 9 Damage Inflicted", "Player 10 Damage Inflicted")
+    colnames(damage_inflicted) = c("Player1DamageInflicted", "Player2DamageInflicted", "Player3DamageInflicted", "Player4DamageInflicted", "Player5DamageInflicted", "Player6DamageInflicted", "Player7DamageInflicted", "Player8DamageInflicted", "Player9DamageInflicted", "Player10DamageInflicted")
     
     # After finishing up the data initialization, we put all of the data into a data frame.
     
@@ -175,7 +175,7 @@ fileToDataFrame = function(filename) {
 ```
 
 ```{r combining_data_sets, eval = FALSE}
-proj_data_cleaned = fileToDataFrame("Test Data.json")
+proj_data_cleaned = fileToDataFrame("doc1.json")
 rbind("PUT ALL DATA SETS HERE")
 ```
 
