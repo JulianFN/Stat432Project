@@ -15,11 +15,6 @@ library(utils)
 library(tidyr)
 ```
 
-```{r data_initialization_step_i}
-#READ IN YOUR DATA FILE USING THIS CODE EACH TIME. THIS WAY, THE CODE WILL RUN CORRECTLY. MAKE SURE YOU CHANGE THE NAME OF THE END DATA SET IN THE BOTTOM OF THE CLEANING CODE CHUNK.
-proj_data = fromJSON(file = "Test Data.json")
-```
-
 ```{r data_cleaning_step_i}
 
 numberOfBuildings = function(observation) {
@@ -29,7 +24,7 @@ numberOfBuildings = function(observation) {
 # RUN THIS CODE ON EVERY SINGLE JSON DATA FILE. YOU CAN RENAME EACH FILE AT THE VERY END 
 
 fileToDataFrame = function(filename) {
-    proj_data = fromJSON(file = filename)
+    proj_data = lapply(readLines(filename), fromJSON)
   
     nobs = length(proj_data)
     
@@ -50,6 +45,8 @@ fileToDataFrame = function(filename) {
     
     
     for(i in 1:nobs){
+      print(i)
+      print(proj_data[[i]]$match_id)
       win[i] = proj_data[[i]]$radiant_win
       timeschat[i] = length(proj_data[[i]]$chat)
       radtower[i] = numberOfBuildings(proj_data[[i]]$tower_status_radiant)
@@ -175,8 +172,23 @@ fileToDataFrame = function(filename) {
 ```
 
 ```{r combining_data_sets, eval = FALSE}
-proj_data_cleaned = fileToDataFrame("doc1.json")
-rbind("PUT ALL DATA SETS HERE")
+require(stringr)
+
+proj_data_cleaned = fileToDataFrame("new/aa.json")
+
+for (file in list.files(str_c("new"))[-1]) {
+  fileStr = paste0("new/", file)
+  print("doing")
+  print(fileStr)
+  proj_data_temp = fileToDataFrame(fileStr)
+  print(fileStr)
+  print("done")
+  proj_data_cleaned = rbind(proj_data_cleaned, proj_data_temp)
+  
+}
+
+write.csv(proj_data_cleaned,'train.csv')
+
 ```
 
 ```{r, eval = false}
