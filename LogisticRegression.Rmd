@@ -6,6 +6,12 @@ output: html_document
 ---
 
 ```{r}
+trainData = read.csv("train.csv")
+testData = read.csv("test.csv")
+```
+
+
+```{r}
 library(corrplot)
 
 corr.d <- cor( proj_data_cleaned )
@@ -22,19 +28,32 @@ ols <- glm(`Radiant Win` ~ ., data = proj_data_cleaned)
 
 ```
 
+
+
 ```{r}
 # load library
 library(neuralnet)
 
 # fit neural network
-nn=neuralnet(`RadiantWin`~ ., data = proj_data_cleaned, hidden= 10,act.fct = "logistic",
+herosOnly = cbind(trainData$RadiantWin, trainData[, seq(8, 117)])
+colnames(herosOnly)[1] = "RadiantWin"
+nn=neuralnet(`RadiantWin`~ ., data = herosOnly, hidden= c(100, 200) ,act.fct = "logistic",
                 linear.output = FALSE)
 
 plot(nn)
+herosOnlyTest = cbind(testData$RadiantWin, testData[, seq(8, 117)])
+nn.results <- compute(nn, testData[, seq(8, 117)])
+results <- data.frame(actual = testData$RadiantWin, prediction = nn.results$net.result)
 
-newdata = proj_data_cleaned[1:300,]
-sum(predict(nn,newdata) > .5)
-sum(newdata$RadiantWin)
+roundedresults<-sapply(results,round,digits=0)
+roundedresultsdf=data.frame(roundedresults)
+attach(roundedresultsdf)
+table(actual,prediction)
+
+
+#newdata = 
+#sum(predict(nn,newdata) > .5)
+#sum(newdata$RadiantWin)
 
 ```
 
