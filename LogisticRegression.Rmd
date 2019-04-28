@@ -6,19 +6,29 @@ output: html_document
 ---
 
 ```{r}
+train_data = read.csv("train.csv")
+test_data = read.csv("test.csv")
+```
+
+```{r}
 library(corrplot)
 
-corr.d <- cor( proj_data_cleaned )
+corr.d <- cor( train_data )
 corr.d[ lower.tri( corr.d, diag = TRUE ) ] <- NA
 corrplot( corr.d, type = "upper", diag = FALSE )
 
-newProjData = proj_data_cleaned[, -seq(8, 117)]
+new_train_data = train_data[, -seq(8, 118)]
 
-mylogit <- glm(`Radiant Win` ~ ., data = newProjData, family = "binomial")
+mylogit <- glm(`RadiantWin` ~ ., data = new_train_data, family = "binomial")
 summary(mylogit)
 
 
-ols <- glm(`Radiant Win` ~ ., data = proj_data_cleaned)
+ols <- glm(`RadiantWin` ~ ., data = train_data)
+
+log_conf_mat=table(test_data$RadiantWin, as.numeric(predict(mylogit,test_data)>=.5))
+
+(log_conf_mat[1,1] + log_conf_mat[2,2])/nrow(test_data)
+
 
 ```
 
@@ -27,15 +37,18 @@ ols <- glm(`Radiant Win` ~ ., data = proj_data_cleaned)
 library(neuralnet)
 
 # fit neural network
-nn=neuralnet(`RadiantWin`~ ., data = proj_data_cleaned, hidden= 10,act.fct = "logistic",
+nn=neuralnet(`RadiantWin`~ ., data = train_data, hidden= 5,act.fct = "logistic",
                 linear.output = FALSE)
 
 plot(nn)
 
-newdata = proj_data_cleaned[1:300,]
-sum(predict(nn,newdata) > .5)
-sum(newdata$RadiantWin)
 
+sum(predict(nn,test_data) > .5)
+sum(test_data$RadiantWin)
+
+nn_conf_mat = table(test_data$RadiantWin, as.numeric(predict(nn,test_data)>=.5))
+
+(nn_conf_mat[1,1] + nn_conf_mat[2,2])/nrow(test_data)
 ```
 
 Neural Network, logistic regresion, and random forest
