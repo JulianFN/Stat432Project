@@ -9,6 +9,8 @@ output: html_document
 
 train_data = read.csv("train.csv")
 test_data = read.csv("test.csv")
+train_data = train_data[, 2:178]
+test_data = test_data[, 2:178]
 ```
 
 
@@ -25,7 +27,7 @@ colnames(herosOnly)[1] = "RadiantWin"
 
 herosOnlyTest = cbind(test_data$RadiantWin, test_data[, seq(8, 117)])
 
-#new_train_data = train_data[, -seq(8, 118)]
+new_train_data = train_data[, -seq(8, 118)]
 
 mylogit <- glm(`RadiantWin` ~ ., data = herosOnly, family = "binomial")
 summary(mylogit)
@@ -52,24 +54,18 @@ library(neuralnet)
 #herosOnly = cbind(trainData$RadiantWin, trainData[, seq(8, 117)])
 #colnames(herosOnly)[1] = "RadiantWin"
 #nn=neuralnet(`RadiantWin`~ ., data = herosOnly, hidden= c(100, 200) ,act.fct = "logistic",
-nn=neuralnet(`RadiantWin`~ ., data = train_data, hidden= 5,act.fct = "logistic",
+
+new_test_data = test_data[, -seq(8, 118)]
+nn=neuralnet(`RadiantWin`~ ., data = new_train_data, hidden= 5,act.fct = "logistic",
                 linear.output = FALSE)
 
 plot(nn)
-herosOnlyTest = cbind(testData$RadiantWin, testData[, seq(8, 117)])
-nn.results <- compute(nn, testData[, seq(8, 117)])
-results <- data.frame(actual = testData$RadiantWin, prediction = nn.results$net.result)
-
-roundedresults<-sapply(results,round,digits=0)
-roundedresultsdf=data.frame(roundedresults)
-attach(roundedresultsdf)
-table(actual,prediction)
 
 
 sum(predict(nn,test_data) > .5)
 sum(test_data$RadiantWin)
 
-nn_conf_mat = table(test_data$RadiantWin, as.numeric(predict(nn,test_data)>=.5))
+nn_conf_mat = table(test_data$RadiantWin, as.numeric(predict(nn,new_test_data)>=.5))
 
 (nn_conf_mat[1,1] + nn_conf_mat[2,2])/nrow(test_data)
 ```
