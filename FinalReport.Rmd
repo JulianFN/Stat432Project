@@ -127,15 +127,23 @@ main="Win Rate VS Hero")
 #axis(2, seq(0, .65, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6, .65))
 ```
 
-```{r, cache = TRUE}
+```{r pickrate, cache = TRUE}
 #par(mar = c(6.5, 6.5, 0.5, 0.5), mgp = c(5, 1, 0))
 acc = frequency / 50000
 names(acc) = M
+
+```
+
+```{r, echo = TRUE}
 
 barplot(sort(acc, decreasing = TRUE), ylim = c(0, .35), xlab="Hero ID",ylab="pick Rate",col="blue",
 main="Hero pick rate")
 
 #axis(2, seq(0, .5, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5))
+
+```
+
+```{r pickwin, cache = TRUE}
 
 pickVsWin = cbind(acc, accuracy)
 
@@ -143,7 +151,7 @@ data = pickVsWin[order(acc, decreasing = TRUE), ]
 
 ```
 
-```{r winratevspick}
+```{r winratevspick, echo = TRUE}
 plot(data[, 1], data[, 2], xlab="Pick rate",ylab="Win Rate",col="blue",
 main="Hero pick rate")
 ```
