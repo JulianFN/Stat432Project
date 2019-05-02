@@ -1,7 +1,6 @@
 ---
 title: "Predicting Outcome of DOTA2 Games"
 subtitle: "STAT 432 Final Report"
-abstract: "Our project attempts to predict the outcome of a DOTA2 game based off of what happened in the game. "
 author:
    Will Jeziorski
    Zhiyuan Xie
