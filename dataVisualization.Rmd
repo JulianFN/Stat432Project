@@ -1,0 +1,91 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+
+train_data = read.csv("train.csv")
+test_data = read.csv("test.csv")
+train_data = train_data[, 2:178]
+test_data = test_data[, 2:178]
+```
+
+```{r}
+frequency = rep(0, 12)
+accuracy = rep(0, 12)
+
+M = rep(0,12)
+    
+for (i in 1:12){
+  M[i] = paste0(i - 1)
+}
+
+for (j in 1:50000) {
+  i = train_data[j, ]
+  frequency[i$RadiantTowerStatus + 1] = frequency[i$RadiantTowerStatus + 1] + 1
+  if (i$RadiantWin == 1) {
+     accuracy[i$RadiantTowerStatus + 1] = accuracy[i$RadiantTowerStatus + 1] + 1
+  }
+}
+accuracy = accuracy  / frequency
+barplot(accuracy, names.arg = M, xlab="Number of Radiant Towers",ylab="Win Rate",col="blue",
+main="Win Rate VS Number of Towers")
+
+
+```
+
+```{r}
+frequency = rep(0, 110)
+accuracy = rep(0, 110)
+
+M = rep(0,110)
+    
+for (i in 1:110){
+  M[i] = paste0(i)
+}
+
+names(accuracy) = M
+for (j in 1:50000) {
+  i = train_data[j, ]
+  heros = train_data[j, seq(8, 117)]
+  idxes = which(heros != 0, arr.ind = TRUE)
+  frequency[idxes[, 2]] = frequency[idxes[, 2]] + 1
+  if (i$RadiantWin == 1) {
+    idxesWin = which( heros == 1, arr.ind=TRUE)
+    accuracy[idxesWin[, 2]] = accuracy[idxesWin[, 2]] + 1
+  }
+  else {
+    idxesWin = which( heros == -1, arr.ind=TRUE)
+    accuracy[idxesWin[, 2]] = accuracy[idxesWin[, 2]] + 1
+  }
+}
+
+accuracy = accuracy  / frequency
+
+barplot(sort(accuracy, decreasing = TRUE), ylim = c(0, .60), xlab="Hero ID",ylab="Win Rate",col="blue",
+main="Win Rate VS Hero")
+
+#axis(2, seq(0, .65, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6, .65))
+```
+
+```{r}
+#par(mar = c(6.5, 6.5, 0.5, 0.5), mgp = c(5, 1, 0))
+acc = frequency / 50000
+names(acc) = M
+
+barplot(sort(acc, decreasing = TRUE), ylim = c(0, .35), xlab="Hero ID",ylab="pick Rate",col="blue",
+main="Hero pick rate")
+
+#axis(2, seq(0, .5, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5))
+```
+```{r}
+pickVsWin = cbind(acc, accuracy)
+
+data = pickVsWin[order(acc, decreasing = TRUE), ]
+
+plot(data[, 1], data[, 2], xlab="Pick rate",ylab="Win Rate",col="blue",
+main="Hero pick rate")
+```
+
+
