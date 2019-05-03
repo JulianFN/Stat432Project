@@ -197,10 +197,26 @@ Summary Here
 
 # Proposed Analysis
 
-Analysis Here
+## Neural Network
+
+We passed our data through the a neural network, however we quickly ran into runtime issues. Therefore, we could only run a 3 layer network at the most as a 4-layer network would never complete or converge. We also could have a large hidden network as anything really more than 3 would take hours to run. We had to leave it at 3 hidden nodes because of that  meaning the accuracy and internal representation were severely harmed. In the end using all the data as input we obtained a  61.65% accuracy. I believe if we had a more powerful computer and more time to run, we could add more layers and nodes to get a higher accuracy.
+
+## Logistic Regression
+
+Since, the neural network failed to accurately predict the winner. We moved onto logistic regression because logistic regression predicts a probability, so if the probability was greater a half we predicted a radiant win else a dire win. When we used all the variables we acquired an accuracy  of 98.47% on the testing data, which is obviously really good. When we looked at the significances of the variables we found that the hero picks were mostly not significant and did not explain a lot. We currently have all the heroes as an indicator variable making the data really sparse maybe there could be a better way of representing it. With this information, we ran the logistic regression again but without the hero id data and with that we got 98.34% accuracy. So losing the hero data did not impact the accuracy a lot. Some of the variables that were the most important predictors were the number of towers, number of barracks, deaths, team that got first blood, and kills by each team. Something interesting was the deaths were actually more significant than kills on first glance, we thought that they would be similar in significance. I believe that deaths are more important because they explain the deaths by external forces that are not enemy players such as creeps, towers, and jungle creeps. This is also the same reason why damage taken by a player is more significant than damage inflicted, because of non-player damage sources. The variables creep score and denies were not that significant compared to the others; because the roles (carry, support, and jungle) the players took was not considered in our data so the information carried by creep score and denies was diminished.
 
 # Conclusion and Discussion
 
-Conclusion Here
+## Discussion
+
+Our project is not without issues. One thing our data set does not identify is the role of each player. In DOTA, each player generally plays a different role in the game for their team. However, our original JSON file did not contain the information pertaining to the role the player played, as in DOTA this is not set by the game but by the players themselves. This may be the reason why creep score and denies were insignificant, among other things. Perhaps if we created an accumulation variable per team we would see a more significant difference. Additionally, our “times chatted” variable did not differentiate between who sent the message, but rather just counted the number of messages sent in the game. As a result, it doesn’t entirely capture the effect chatting has on a team’s ability to win. It could also be argued that “times chatted” depends on which side is winning, rather than how we present it in the model. This opens up the door to future analysis on how chatting affects (or is affected by) how a team is performing in game.
+
+Additionally, we wanted our neural net to have more hidden nodes, but we could not support the computational time needed to do so with our data. If we cut down the size of our data set a bit we may have been able to get a neural net that provided a better fit than the one we used.
+
+## Conclusion
+
+From our use of a Logistic Regression, we found that the best indicators for which team won a game were in general deaths, then wins. We found that variables such as times chatted and the creep score and denies were rather insignificant when predicting the outcome. Our logistic regression was incredibly good at classifying who won the match, with a less than 2% error rate for both of our models. The neural net performed a lot worse, having a 38.35% error rate. 
+
+
 
 
