@@ -100,6 +100,8 @@ head(train_data,6)[,1:15]
 
 To get a sense of what are data involves, we created a few charts to familiarize the reader with some of the things our data set holds.
 
+First, we created a bar plot visualizing the win rate vs number of towers. This graph will help the reader see how towers affect the winrate.
+
 ```{r acc_creation, cache = TRUE}
 frequency = rep(0, 12)
 accuracy = rep(0, 12)
@@ -126,6 +128,10 @@ main="Win Rate VS Number of Towers")
 
 
 ```
+
+In general, we see that win the radiant has more towers they end up winning more. This makes perfect sense, as towers prevent the enemy team from running into the base and destroying it.
+
+Next, we created a bar plot showing how win rate differed between heroes. 
 
 ```{r accfreqcreate, cache = TRUE}
 frequency = rep(0, 110)
@@ -157,12 +163,16 @@ accuracy = accuracy  / frequency
 
 ```
 
-```{r, winrateplot, echo = TRUE}
+```{r winrateplot, echo = TRUE, fig.height = 4, fig.width = 6}
 barplot(sort(accuracy, decreasing = TRUE), ylim = c(0, .60), xlab="Hero ID",ylab="Win Rate",col="blue",
 main="Win Rate VS Hero")
 
 #axis(2, seq(0, .65, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6, .65))
 ```
+
+From this plot, we identified that <HERO 1, 2 AND 3> all had the highest winrate, while <HERO 4, 5, AND 6> had the lowest winrates. This is interesting because <INSERT HERE>
+
+We next made a similar plot that detailed which heroes were the most popular.
 
 ```{r pickrate, cache = TRUE}
 #par(mar = c(6.5, 6.5, 0.5, 0.5), mgp = c(5, 1, 0))
@@ -171,7 +181,7 @@ names(acc) = M
 
 ```
 
-```{r, echo = TRUE}
+```{r heroplot, echo = TRUE, fig.height = 4, fig.width = 5}
 
 barplot(sort(acc, decreasing = TRUE), ylim = c(0, .35), xlab="Hero ID",ylab="pick Rate",col="blue",
 main="Hero pick rate")
@@ -180,6 +190,7 @@ main="Hero pick rate")
 
 ```
 
+From these plots, we say that 
 ```{r pickwin, cache = TRUE}
 
 pickVsWin = cbind(acc, accuracy)
@@ -190,10 +201,10 @@ data = pickVsWin[order(acc, decreasing = TRUE), ]
 
 ```{r winratevspick, echo = TRUE}
 plot(data[, 1], data[, 2], xlab="Pick rate",ylab="Win Rate",col="blue",
-main="Hero pick rate")
+main="Hero Win Rate vs Pick Rate")
 ```
 
-Summary Here
+
 
 # Proposed Analysis
 
