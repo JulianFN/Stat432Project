@@ -51,9 +51,38 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Intro Here
+## Game description
+
+Dota 2 has been one of the most famous multiplayer online battle arena game since 2013. The game has five people play against five other people on two different teams called Radiant and Dire. Player pick heroes, and each hero has unique abilities. The team that wins does so by destroying the enemy base, called the ancient.
+
+## Our goal
+
+For our project, our goal is to find which factors will be important in determining the winner. To do this, we needed to create a data set that allowed us to perform an analysis on which team won for a single game.
+
+## Data Description
+ 
+Our dataset comes from OpenDota.com, and in our project, we specifically use their YASP dataset for doing the analysis. The aggregate dataset contains approximately five- hundred games in 2015, and each game have data of variables is shown below:
+
+* Side of Winner 
+* Tower status 
+* Number of Chats
+* Structure Status
+* Creeps Scores  
+
+Link to the data source: magnet:?xt=urn:btih:5c5deeb6cfe1c944044367d2e7465fd8bd2f4acf&tr=http%3A%2F%2Facademictorrents.com%2Fannounce.php&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce
+
+## Literature Review
+
+A team coming from University of California, San Diego has done the a similar analysis based on logistic regression and random forest classifier. They first used post-game statistics, which included gold per minute, XP per minute, and kill per minute. These data are considerably important because the amount of gold can determine which items the player could buy, and XP could show hero’s level status. Using this dataset, their logistic regression and random forest gave them a win rate around 99%. On the other hand, they use only heroes ID from from each side and synergy for each two heroes from each side to construct models, which give them a lower rate about 70%. 
+
 
 # Summary Statistics and Data Visualization
+
+## Data Cleaning
+
+For this project, we needed to access thousands of games worth of DOTA 2 data. To do this, we first downloaded about Open DOTA website. This website provides information about all aspects of the game, ranging from the macro-game values such as who won the game and what objectives were taken to the micro-game data involving individual creep score and lane position. As a result, one observation contains a lot of data. The first observation of one of our initial data sets was a 14 minute and 58 second game. When we extracted the observation into a list in R we found that it was 145 pages of text in Microsoft Word if we allowed 3 columns per page of observations.
+
+Clearly, we cannot do analysis on a data set this large. As a result, we decided to extract only the variables we thought would influence a win for either side. When we were cleaning the data, we ran into a couple of issues. First, we ran into an issue where there could be games that don’t initialize and don’t end with a winner. Luckily, this caused our function to fail to run, and we were able to drop the putliner. Clearly, there are more variables that we could extract, but these are the ones we decided to analyze given our time constraints. As a result of this cleaning, we shrunk our about 11 gigabytes of data to two files totaling 27 megabytes of data. 
 
 ```{r data_init, cache = TRUE}
 
@@ -62,6 +91,14 @@ test_data = read.csv("test.csv")
 train_data = train_data[, 2:178]
 test_data = test_data[, 2:178]
 ```
+
+Here is a quick sample of our data. Our training data set and testing data set have the same format. For our training data set, we have 50000 observations, while our testing data set has 10000 observations so we have an 83%/17% split of our data. The data output below is the first 6 observations of the training data set and only the first 15 columns are output from this sample.
+
+```{r, echo = TRUE, eval = TRUE}
+head(train_data,6)[,1:15]
+```
+
+To get a sense of what are data involves, we created a few charts to familiarize the reader with some of the things our data set holds.
 
 ```{r acc_creation, cache = TRUE}
 frequency = rep(0, 12)
@@ -90,7 +127,7 @@ main="Win Rate VS Number of Towers")
 
 ```
 
-```{r, cache = TRUE}
+```{r accfreqcreate, cache = TRUE}
 frequency = rep(0, 110)
 accuracy = rep(0, 110)
 
