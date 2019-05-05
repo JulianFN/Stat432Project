@@ -7,8 +7,8 @@ author:
    and Julian Nieto
 date: "May 1, 2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r set-options, include = FALSE}
@@ -170,7 +170,7 @@ main="Win Rate VS Hero")
 #axis(2, seq(0, .65, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6, .65))
 ```
 
-From this plot, we identified that <HERO 1, 2 AND 3> all had the highest winrate, while <HERO 4, 5, AND 6> had the lowest winrates. This is interesting because <INSERT HERE>
+From this plot, we identified that Chen, Clinkz, and Skywrath mage all had the highest winrate with about 58%, while Storm Spirit, Puck, and Night Stalker had the lowest winrates each with about 41%. Having played some DoTa, Storm Spririt and Puck are not terrible heros but they are hard heroes to learn leading to low win rates. The differences in win rates arent too drastic with the highest chances being 58% however the difference between the top and bottom heros is 17%, meaning over a lot of games you will notice the difference.However just using the hero win rates as a predictor would still be bascally a coin toss.
 
 We next made a similar plot that detailed which heroes were the most popular.
 
@@ -190,21 +190,29 @@ main="Hero pick rate")
 
 ```
 
-From these plots, we say that 
+From this data, we see that Shadow Fiend, Windrunner, and Alchmist are the most picked with 32%, 30%, and 23%. This means that Shadow Fiend was in 32% of every game we looked, which is very high considering there are 100+ heros to chose from. The least picked were Jakiro, Lycan, and Abaddon each with about a 2% pick rate so a game with these heros in the line ups only has a 2% chance of happening.
 ```{r pickwin, cache = TRUE}
 
 pickVsWin = cbind(acc, accuracy)
 
-data = pickVsWin[order(acc, decreasing = TRUE), ]
+datat = pickVsWin[order(acc, decreasing = TRUE), ]
+datat = as.data.frame(datat)
 
 ```
 
-```{r winratevspick, echo = TRUE}
-plot(data[, 1], data[, 2], xlab="Pick rate",ylab="Win Rate",col="blue",
+```{r winratevspick, echo = TRUE, fig.width=10, fig.height=4}
+
+par(mfrow = c(1,2))
+plot(datat$acc, datat$accuracy, xlab="Pick rate",ylab="Win Rate",col="blue",
 main="Hero Win Rate vs Pick Rate")
+
+require(splines)
+fit.bs = lm(accuracy ~ bs(acc, df=6), data=datat)
+plot(datat$acc, datat$accuracy, pch = 19, xlab = "Pick rate", ylab = "Win rate", col = "darkorange")   
+lines(seq(0.02, .32,.01), predict(fit.bs, data.frame("acc"= seq(0.02, .32,.01))), col="deepskyblue", lty=1, lwd = 3)    
 ```
 
-
+For our next plot we hoped to capture the relationship between being picked and winning. The relationship is not that strong between the two but there is a slight trend. The lower picked heros do seem to have a slightly below average winrate. It seems to curve up and peak around a 10% pickrate with all the highest winrate heros lying there. Then it tappers of to around a 50% winrate the higher the pickrate. Overall, I would say the relationship between winrate and pick rate is weak
 
 # Proposed Analysis
 
