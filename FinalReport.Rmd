@@ -7,8 +7,8 @@ author:
    and Julian Nieto
 date: "May 1, 2019"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r set-options, include = FALSE}
@@ -51,25 +51,35 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+Before we dive into the paper, we want to provide the reader with a link to our data cleaning rmd file, as it is rather large and we don't want to include it in our paper for space considerations. We also provide the reader with two more links in the repository which contain both the training and testing data set.
+
+Link for Data Cleaning File: https://github.com/JulianFN/Stat432Project/blob/master/Project%20Data%20Cleaning%20File.Rmd
+
+Link for Training Data: https://github.com/JulianFN/Stat432Project/blob/master/train.csv
+
+Link for Testing Data: https://github.com/JulianFN/Stat432Project/blob/master/test.csv
+
 ## Game description
 
-Dota 2 has been one of the most famous multiplayer online battle arena game since 2013. The game has five people play against five other people on two different teams called Radiant and Dire. Player pick heroes, and each hero has unique abilities. The team that wins does so by destroying the enemy base, called the ancient.
+Dota 2 has been one of the most famous multiplayer online battle arena games since 2013. The game has five people play against five other people on two different teams called Radiant and Dire. Player pick heroes, and each hero has unique abilities. The team that wins does so by destroying the enemy base, called the ancient.
 
 ## Our goal
 
-For our project, our goal is to find which factors will be important in determining the winner. To do this, we needed to create a data set that allowed us to perform an analysis on which team won for a single game.
+For our project, our goal is to find which factors will be important in determining the winner. To do this, we needed to create a data set that allowed us to perform an analysis on which team won for a single game. After creating this data set, we want to perform various binary classification techniques such as neural networks and logistic regression. 
 
 ## Data Description
  
-Our dataset comes from OpenDota.com, and in our project, we specifically use their YASP dataset for doing the analysis. The aggregate dataset contains approximately five- hundred games in 2015, and each game have data of variables is shown below:
+Our dataset comes from OpenDota.com, and in our project, we specifically use their YASP dataset for doing the analysis. The aggregate dataset contains approximately five- hundred games in 2015, and each game have data of variables, some of which are shown below.
 
 * Side of Winner 
 * Tower status 
 * Number of Chats
 * Structure Status
-* Creeps Scores  
+* Creeps Score 
 
-Link to the data source: magnet:?xt=urn:btih:5c5deeb6cfe1c944044367d2e7465fd8bd2f4acf&tr=http%3A%2F%2Facademictorrents.com%2Fannounce.php&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce
+This data was initially contained in a JSON file that was about 100 GB large. We then used the previously mentioned data cleaning file to clean the data and then dropped the first column of the data (as it was just X values.) 
+
+The link to the source of the data set we used is in the references section of this paper.
 
 ## Literature Review
 
@@ -166,8 +176,6 @@ accuracy = accuracy  / frequency
 ```{r winrateplot, echo = TRUE, fig.height = 4, fig.width = 6}
 barplot(sort(accuracy, decreasing = TRUE), ylim = c(0, .60), xlab="Hero ID",ylab="Win Rate",col="blue",
 main="Win Rate VS Hero")
-
-#axis(2, seq(0, .65, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6, .65))
 ```
 
 From this plot, we identified that Chen, Clinkz, and Skywrath mage all had the highest winrate with about 58%, while Storm Spirit, Puck, and Night Stalker had the lowest winrates each with about 41%. Having played some DoTa, Storm Spririt and Puck are not terrible heros but they are hard heroes to learn leading to low win rates. The differences in win rates arent too drastic with the highest chances being 58% however the difference between the top and bottom heros is 17%, meaning over a lot of games you will notice the difference.However just using the hero win rates as a predictor would still be bascally a coin toss.
@@ -175,19 +183,14 @@ From this plot, we identified that Chen, Clinkz, and Skywrath mage all had the h
 We next made a similar plot that detailed which heroes were the most popular.
 
 ```{r pickrate, cache = TRUE}
-#par(mar = c(6.5, 6.5, 0.5, 0.5), mgp = c(5, 1, 0))
 acc = frequency / 50000
 names(acc) = M
-
 ```
 
 ```{r heroplot, echo = TRUE, fig.height = 4, fig.width = 5}
 
 barplot(sort(acc, decreasing = TRUE), ylim = c(0, .35), xlab="Hero ID",ylab="pick Rate",col="blue",
 main="Hero pick rate")
-
-#axis(2, seq(0, .5, .05), c(0, .05,.1,.15,.2,.25,.3,.35,.4,.45,.5))
-
 ```
 
 From this data, we see that Shadow Fiend, Windrunner, and Alchmist are the most picked with 32%, 30%, and 23%. This means that Shadow Fiend was in 32% of every game we looked, which is very high considering there are 100+ heros to chose from. The least picked were Jakiro, Lycan, and Abaddon each with about a 2% pick rate so a game with these heros in the line ups only has a 2% chance of happening.
@@ -216,15 +219,64 @@ For our next plot we hoped to capture the relationship between being picked and 
 
 # Proposed Analysis
 
+For our analysis, we decided to focus on assigning a probability to "RadiantWin" taking a value of 1. Then, we would use this probability to assign values of 1 or 0 to the supplied testing data set, and then we would create a confusion matrix to see how well our models worked. For this paper, we focused on two different methods of this type of binary classification: Neural Network and Logistic Regression. Both of these methods will apply probabilities to our outcome variable, which we can then use to classify our results into each category.
+
 ## Neural Network
 
-We passed our data through the a neural network, however we quickly ran into runtime issues. Therefore, we could only run a 3 layer network at the most as a 4-layer network would never complete or converge. We also could have a large hidden network as anything really more than 3 would take hours to run. We had to leave it at 3 hidden nodes because of that  meaning the accuracy and internal representation were severely harmed. In the end using all the data as input we obtained a  61.65% accuracy. I believe if we had a more powerful computer and more time to run, we could add more layers and nodes to get a higher accuracy.
+To begin our analysis, we first wanted to try a nerual network. We passed our data through the a neural network, however we quickly ran into runtime issues. Therefore, we could only run a 3 layer network at the most as a 4-layer network would never complete or converge. We also could have a large hidden network as anything really more than 3 would take hours to run. We had to leave it at 3 hidden nodes because of that  meaning the accuracy and internal representation were severely harmed. In the end using all the data as input we obtained a  66.01% accuracy. We believe if we had a more powerful computer and more time to run, we could add more layers and nodes to get a higher accuracy.
+
+```{r neuralnet, cache= TRUE, echo = TRUE}
+library(neuralnet)
+set.seed(42)
+new_train_data = train_data[, -seq(8, 117)]
+new_test_data = test_data[, -seq(8, 117)]
+nn=neuralnet(`RadiantWin`~ ., data = train_data, hidden= 3,act.fct = "logistic",
+                linear.output = FALSE, stepmax = 10000)
+
+nn_conf_mat = table(test_data$RadiantWin, as.numeric(predict(nn,test_data)>=.5))
+
+nn_conf_mat
+
+(nn_conf_mat[1,1] + nn_conf_mat[2,2])/nrow(test_data)
+```
+
 
 ## Logistic Regression
 
-Since, the neural network failed to accurately predict the winner. We moved onto logistic regression because logistic regression predicts a probability, so if the probability was greater a half we predicted a radiant win else a dire win. When we used all the variables we acquired an accuracy  of 98.47% on the testing data, which is obviously really good. When we looked at the significances of the variables we found that the hero picks were mostly not significant and did not explain a lot. We currently have all the heroes as an indicator variable making the data really sparse maybe there could be a better way of representing it. With this information, we ran the logistic regression again but without the hero id data and with that we got 98.34% accuracy. So losing the hero data did not impact the accuracy a lot. Some of the variables that were the most important predictors were the number of towers, number of barracks, deaths, team that got first blood, and kills by each team. Something interesting was the deaths were actually more significant than kills on first glance, we thought that they would be similar in significance. I believe that deaths are more important because they explain the deaths by external forces that are not enemy players such as creeps, towers, and jungle creeps. This is also the same reason why damage taken by a player is more significant than damage inflicted, because of non-player damage sources. The variables creep score and denies were not that significant compared to the others; because the roles (carry, support, and jungle) the players took was not considered in our data so the information carried by creep score and denies was diminished.
+Since, the neural network failed to accurately predict the winner. We moved onto logistic regression because logistic regression predicts a probability, so if the probability was greater a half we predicted a radiant win else a dire win. When we used all the variables we acquired an accuracy  of 98.47% on the testing data, which is obviously really good. When we looked at the significances of the variables we found that the hero picks were mostly not significant and did not explain a lot. We currently have all the heroes as an indicator variable making the data really sparse maybe there could be a better way of representing it. With this information, we ran the logistic regression again but without the hero id data and with that we got 98.34% accuracy. Thus, removing the hero data did not impact the accuracy a lot. Some of the variables that were the most important predictors were the number of towers, number of barracks, deaths, team that got first blood, and kills by each team. Something interesting was the deaths were actually more significant than kills on first glance, we thought that they would be similar in significance. We believe that deaths are more important because they explain the deaths by external forces that are not enemy players such as creeps, towers, and jungle creeps. This is also the same reason why damage taken by a player is more significant than damage inflicted, because of non-player damage sources. The variables creep score and denies were not that significant compared to the others; because the roles (carry, support, and jungle) the players took was not considered in our data so the information carried by creep score and denies was diminished.
+
+```{r logitheroes, echo = TRUE, cache = TRUE}
+
+mylogit <- glm(`RadiantWin` ~ ., data = train_data, family = "binomial")
+
+summary(mylogit)$coefficients[c(3:6,118:157),]
+
+log_conf_mat=table(test_data$RadiantWin, as.numeric(predict(mylogit,test_data)>=.5))
+
+log_conf_mat
+
+(log_conf_mat[1,1] + log_conf_mat[2,2])/nrow(test_data)
+```
+
+```{r logitnohero, echo = TRUE, cache = TRUE}
+mylogitnh <- glm(`RadiantWin` ~ ., data = new_train_data, family = "binomial")
+
+log_conf_mat_nh=table(new_test_data$RadiantWin, as.numeric(predict(mylogitnh,new_test_data)>=.5))
+
+log_conf_mat_nh
+
+(log_conf_mat_nh[1,1] + log_conf_mat_nh[2,2])/nrow(new_test_data)
+
+```
+
+Regression output for the data without heroes is omitted due to being approximately the same, since the hero data didn't add much to our prediction ability.
 
 # Conclusion and Discussion
+
+## Conclusion
+
+From our use of a Logistic Regression, we found that the best indicators for which team won a game were deaths, wins, and the structure status status for each team. We found that variables such as times chatted and the creep score and denies were rather insignificant when predicting the outcome. Our logistic regression was incredibly good at classifying who won the match, with a less than 2% error rate for both of our models. The neural net performed a lot worse, having a 38.35% error rate. 
+
 
 ## Discussion
 
@@ -232,10 +284,12 @@ Our project is not without issues. One thing our data set does not identify is t
 
 Additionally, we wanted our neural net to have more hidden nodes, but we could not support the computational time needed to do so with our data. If we cut down the size of our data set a bit we may have been able to get a neural net that provided a better fit than the one we used.
 
-## Conclusion
+If we had the computational ability and time to do so, we would also be interested in looking at if certain combinations of heroes were significant to determining whether or not a team won. There are instances where certain heroes synergize well when played together. There is also the case where certain heroes counter each other in game, so that could change the winrate as well. Thus, it would be extremely interesting to see if these hero combinations changed our analysis at all, especially the logistic regression with hero-level data.
 
-From our use of a Logistic Regression, we found that the best indicators for which team won a game were in general deaths, then wins. We found that variables such as times chatted and the creep score and denies were rather insignificant when predicting the outcome. Our logistic regression was incredibly good at classifying who won the match, with a less than 2% error rate for both of our models. The neural net performed a lot worse, having a 38.35% error rate. 
+\clearpage
 
+# References
 
+Kinkade, Nicholas and Kyung yul Kevin Lim (n.d): "DOTA 2 Win Prediction" _UC San Diego_ 1-7.
 
-
+"OpenDota Data Dump", OpenDota Blog. Retrieved from https://blog.opendota.com/2015/12/20/datadump/
