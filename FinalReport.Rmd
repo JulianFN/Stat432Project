@@ -1,10 +1,10 @@
 ---
 title: "Predicting Outcome of DOTA2 Games"
-author: "Will Jeziorski Zhiyuan Xie and Julian Nieto"
+author: "Will Jeziorski (wsj2) Zhiyuan Xie (zx19) and Julian Nieto (jnieto6)"
 date: "May 1, 2019"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 subtitle: STAT 432 Final Report
 ---
 
