@@ -1,14 +1,11 @@
 ---
 title: "Predicting Outcome of DOTA2 Games"
-subtitle: "STAT 432 Final Report"
-author:
-   Will Jeziorski
-   Zhiyuan Xie
-   and Julian Nieto
+author: "Will Jeziorski Zhiyuan Xie and Julian Nieto"
 date: "May 1, 2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
+subtitle: STAT 432 Final Report
 ---
 
 ```{r set-options, include = FALSE}
@@ -61,7 +58,7 @@ Link for Testing Data: https://github.com/JulianFN/Stat432Project/blob/master/te
 
 ## Game description
 
-Dota 2 has been one of the most famous multiplayer online battle arena games since 2013. The game has five people play against five other people on two different teams called Radiant and Dire. Player pick heroes, and each hero has unique abilities. The team that wins does so by destroying the enemy base, called the ancient.
+Dota 2 is one of the most famous multiplayer online battle arena games since 2013. The game has five people play against five other people on two different teams called Radiant and Dire.The players pick heroes, with each hero having a set of unique abilities. The team that wins does so by destroying the enemy base, called the ancient.
 
 ## Our goal
 
@@ -69,21 +66,27 @@ For our project, our goal is to find which factors will be important in determin
 
 ## Data Description
  
-Our dataset comes from OpenDota.com, and in our project, we specifically use their YASP dataset for doing the analysis. The aggregate dataset contains approximately five- hundred games in 2015, and each game have data of variables, some of which are shown below.
+Our dataset comes from OpenDota.com, and in our project, we specifically use their YASP dataset for doing the analysis. The aggregate dataset contains approximately five-hundred thousand games (Of which we took 60,000) in 2015,each game variables such as.
 
-* Side of Winner 
-* Tower status 
-* Number of Chats
-* Structure Status
-* Creeps Score 
+* Team that Won 
+* Tower status (Number of towers left at the end)
+* Times Chatted
+* Structure Status (Number of barracks left at the end)
+* Player Data (Which contained this for each player)
+    * Creep Score
+    * Deaths
+    * Kills
+    * Denies
+    * Hero 
+    * Items
 
-This data was initially contained in a JSON file that was about 100 GB large. We then used the previously mentioned data cleaning file to clean the data and then dropped the first column of the data (as it was just X values.) 
+This data was initially contained in a JSON file that was about 62 GB large. We then used the previously mentioned data cleaning file to clean the data and then dropped the first column of the data (as it was just X values.) 
 
 The link to the source of the data set we used is in the references section of this paper.
 
 ## Literature Review
 
-A team coming from University of California, San Diego has done the a similar analysis based on logistic regression and random forest classifier. They first used post-game statistics, which included gold per minute, XP per minute, and kill per minute. These data are considerably important because the amount of gold can determine which items the player could buy, and XP could show hero’s level status. Using this dataset, their logistic regression and random forest gave them a win rate around 99%. On the other hand, they use only heroes ID from from each side and synergy for each two heroes from each side to construct models, which give them a lower rate about 70%. 
+Nicholas Kinkade and Kyung yul Kevin Lim from University of California at San Diego has done the a similar analysis based on logistic regression and random forest classifier. They first used post-game statistics, which included gold per minute, XP per minute, and kill per minute. These data are considerably important because the amount of gold can determine which items the player could buy, and XP could show hero’s level status. Using this dataset, their logistic regression and random forest gave them a win rate around 99%. They also used the hero picks from from each side and calculated the synergy between the team's heroes from each side. They even added how much the enemy's countered the other's team by esssentially calculating how effective each hero was against another. Using the only heros picks, synergy, and countering statistics the team was able to obtain a 70% prediction rate, which is impressive considering they did not use any post or during game variables to help only the starting configuration.
 
 
 # Summary Statistics and Data Visualization
@@ -92,7 +95,7 @@ A team coming from University of California, San Diego has done the a similar an
 
 For this project, we needed to access thousands of games worth of DOTA 2 data. To do this, we first downloaded about Open DOTA website. This website provides information about all aspects of the game, ranging from the macro-game values such as who won the game and what objectives were taken to the micro-game data involving individual creep score and lane position. As a result, one observation contains a lot of data. The first observation of one of our initial data sets was a 14 minute and 58 second game. When we extracted the observation into a list in R we found that it was 145 pages of text in Microsoft Word if we allowed 3 columns per page of observations.
 
-Clearly, we cannot do analysis on a data set this large. As a result, we decided to extract only the variables we thought would influence a win for either side. When we were cleaning the data, we ran into a couple of issues. First, we ran into an issue where there could be games that don’t initialize and don’t end with a winner. Luckily, this caused our function to fail to run, and we were able to drop the putliner. Clearly, there are more variables that we could extract, but these are the ones we decided to analyze given our time constraints. As a result of this cleaning, we shrunk our about 11 gigabytes of data to two files totaling 27 megabytes of data. 
+Clearly, we cannot do analysis on a data set this large. As a result, we decided to extract only the variables we thought would influence a win for either side. When we were cleaning the data, we ran into a couple of issues. First, we ran into an issue where there could be games that don’t initialize and don’t end with a winner. Luckily, this caused our function to fail to run, and we were able to drop the outliner. Clearly, there are more variables that we could extract, but these are the ones we decided to analyze given our time constraints. As a result of this cleaning, we shrunk our about 11 gigabytes of data to two files totaling 27 megabytes of data. 
 
 ```{r data_init, cache = TRUE}
 
@@ -178,7 +181,7 @@ barplot(sort(accuracy, decreasing = TRUE), ylim = c(0, .60), xlab="Hero ID",ylab
 main="Win Rate VS Hero")
 ```
 
-From this plot, we identified that Chen, Clinkz, and Skywrath mage all had the highest winrate with about 58%, while Storm Spirit, Puck, and Night Stalker had the lowest winrates each with about 41%. Having played some DoTa, Storm Spririt and Puck are not terrible heros but they are hard heroes to learn leading to low win rates. The differences in win rates arent too drastic with the highest chances being 58% however the difference between the top and bottom heros is 17%, meaning over a lot of games you will notice the difference.However just using the hero win rates as a predictor would still be bascally a coin toss.
+From this plot, we identified that Chen, Clinkz, and Skywrath Mage all had the highest winrate with about 58%, while Storm Spirit, Puck, and Night Stalker had the lowest winrates each with about 41%. Having played some DoTa, Storm Spririt and Puck are not terrible heros but they are hard heroes to learn leading them to have low win rates. The differences in win rates arent too drastic with the highest chances being 58% however the difference between the top and bottom heros is 17%, meaning over a lot of games you will notice the difference. However just using the hero win rates as a predictor would still be bascally a coin toss.
 
 We next made a similar plot that detailed which heroes were the most popular.
 
@@ -193,7 +196,7 @@ barplot(sort(acc, decreasing = TRUE), ylim = c(0, .35), xlab="Hero ID",ylab="pic
 main="Hero pick rate")
 ```
 
-From this data, we see that Shadow Fiend, Windrunner, and Alchmist are the most picked with 32%, 30%, and 23%. This means that Shadow Fiend was in 32% of every game we looked, which is very high considering there are 100+ heros to chose from. The least picked were Jakiro, Lycan, and Abaddon each with about a 2% pick rate so a game with these heros in the line ups only has a 2% chance of happening.
+From this data, we see that Shadow Fiend, Windrunner, and Alchmist are the most picked with 32%, 30%, and 23%. This means that Shadow Fiend was in 32% of every game we looked, which is high considering there are 100+ heros to chose from. The least picked were Jakiro, Lycan, and Abaddon each with about a 2% pick rate so a game with these heros in the line ups only has a 2% chance of happening.
 ```{r pickwin, cache = TRUE}
 
 pickVsWin = cbind(acc, accuracy)
@@ -223,7 +226,7 @@ For our analysis, we decided to focus on assigning a probability to "RadiantWin"
 
 ## Neural Network
 
-To begin our analysis, we first wanted to try a nerual network. We passed our data through the a neural network, however we quickly ran into runtime issues. Therefore, we could only run a 3 layer network at the most as a 4-layer network would never complete or converge. We also could have a large hidden network as anything really more than 3 would take hours to run. We had to leave it at 3 hidden nodes because of that  meaning the accuracy and internal representation were severely harmed. In the end using all the data as input we obtained a  66.01% accuracy. We believe if we had a more powerful computer and more time to run, we could add more layers and nodes to get a higher accuracy.
+To begin our analysis, we first wanted to try a nerual network. We passed our data through the a neural network, however we quickly ran into runtime issues. Therefore, we could only run a 3 layer network at the most as a 4-layer network would never complete or converge. We also could not have a large hidden network as anything really more than 3 nodes would take hours to run. We had to leave it at 3 hidden nodes because of that  meaning the accuracy and internal representation were severely harmed. In the end using all the data as input we obtained a  66.01% accuracy. We believe if we had a more powerful computer and more time to run, we could add more layers and nodes to get a higher accuracy.
 
 ```{r neuralnet, cache= TRUE, echo = TRUE}
 library(neuralnet)
@@ -243,7 +246,7 @@ nn_conf_mat
 
 ## Logistic Regression
 
-Since, the neural network failed to accurately predict the winner. We moved onto logistic regression because logistic regression predicts a probability, so if the probability was greater a half we predicted a radiant win else a dire win. When we used all the variables we acquired an accuracy  of 98.47% on the testing data, which is obviously really good. When we looked at the significances of the variables we found that the hero picks were mostly not significant and did not explain a lot. We currently have all the heroes as an indicator variable making the data really sparse maybe there could be a better way of representing it. With this information, we ran the logistic regression again but without the hero id data and with that we got 98.34% accuracy. Thus, removing the hero data did not impact the accuracy a lot. Some of the variables that were the most important predictors were the number of towers, number of barracks, deaths, team that got first blood, and kills by each team. Something interesting was the deaths were actually more significant than kills on first glance, we thought that they would be similar in significance. We believe that deaths are more important because they explain the deaths by external forces that are not enemy players such as creeps, towers, and jungle creeps. This is also the same reason why damage taken by a player is more significant than damage inflicted, because of non-player damage sources. The variables creep score and denies were not that significant compared to the others; because the roles (carry, support, and jungle) the players took was not considered in our data so the information carried by creep score and denies was diminished.
+Since, the neural network failed to accurately predict the winner. We moved onto logistic regression because logistic regression predicts a probability, so if the probability was greater a half we predicted a radiant win else a dire win. When we used all the variables, we acquired an accuracy  of 98.47% on the testing data, which is obviously really good. When we looked at the significances of the variables we found that the hero picks were mostly not significant and did not explain a lot. We think that is because, we currently have all the heroes as an indicator variable making the data really sparse maybe there could be a better way of representing it. With this information, we ran the logistic regression again but without the hero data and with that we got 98.34% accuracy. Thus, removing the hero data did not impact the accuracy a lot. Some of the variables that were the most important predictors were the number of towers, number of barracks, deaths, team that got first blood, and kills by each team. Something interesting about that was that the deaths were actually more significant than kills, on first glance we thought that they would be similar in significance. However, revisiting it made us come to the conclusion that deaths are more important because they explain the deaths by external forces that are not enemy players such as creeps, towers, and jungle creeps. This is also the same reason why damage taken by a player is more significant than damage inflicted, because of non-player damage sources. The variables creep score and denies were not that significant compared to the others, because the roles (carry, support, and jungle) the players took were not considered in our data so the information carried by creep score and denies was diminished.
 
 ```{r logitheroes, echo = TRUE, cache = TRUE}
 
